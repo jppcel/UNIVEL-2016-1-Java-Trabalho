@@ -1,0 +1,62 @@
+package me.polles;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+
+public class SQLGenI extends SqlGen {
+
+	@Override
+	protected String getCreateTable(Connection con, Object obj) {
+		Class<?> Cla = obj.getClass();
+		// TODO Auto-generated method stub
+		try{
+			StringBuilder sb = new StringBuilder();
+			String TableName;
+			if(Cla.isAnnotationPresent(Tabela.class)){
+				Tabela annotationTable = Cla.getAnnotation(Tabela.class);
+				TableName = annotationTable.value();
+			}else{
+				TableName = Cla.getSimpleName().toUpperCase();
+			}
+		}catch(SecurityException e){
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	protected String getDropTable(Connection con, Object obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected PreparedStatement getSqlInsert(Connection con, Object obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected PreparedStatement getSqlSelectAll(Connection con, Object obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected PreparedStatement getSqlSelectById(Connection con, Object obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected PreparedStatement getSqlUpdateById(Connection con, Object obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	protected PreparedStatement getSqlDeleteById(Connection con, Object obj) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

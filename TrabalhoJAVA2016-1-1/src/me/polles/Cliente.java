@@ -18,6 +18,19 @@ public class Cliente {
 
 	@Coluna(nome="CLESTADOCIVIL")
 	private EstadoCivil estadoCivil;
+
+	public Cliente() {
+		this(0, null, null, null, null);
+	}
+	
+	public Cliente(int ID, String Nome, String Endereco, String Telefone, EstadoCivil estadoCivil){
+		super();
+		this.id = ID;
+		this.nome = Nome;
+		this.endereco = Endereco;
+		this.telefone = Telefone;
+		this.estadoCivil = estadoCivil;
+	}
 	
 
 
