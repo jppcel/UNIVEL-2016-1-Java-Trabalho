@@ -1,0 +1,15 @@
+package me.polles;
+
+import java.sql.SQLException;
+
+public class Execute {
+	
+	public static void main(String[] args) throws SQLException{
+		Dao<Cliente, Cliente> DC = new DaoI<Cliente, Cliente>();
+		
+		Cliente Cl1 = new Cliente(1,"João","Rua 1, 2","", EstadoCivil.SOLTEIRO);
+		Cliente Cl2 = new Cliente(2,"Paulo","Rua A, 43", "", EstadoCivil.VIUVO);
+		Cliente Cl3 = new Cliente(3,"Polles","Rua NULL, 94", "", EstadoCivil.CASADO);
+	}
+	
+}

@@ -1,0 +1,11 @@
+package me.polles;
+
+import java.sql.SQLException;
+
+public class Execute {
+	
+	public static void main(String[] args) throws SQLException{
+		Dao<Cliente, Cliente> DC = new DaoI<Cliente, Cliente>();
+	}
+	
+}
