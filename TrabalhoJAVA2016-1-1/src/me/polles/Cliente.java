@@ -1,4 +1,4 @@
-package polles.me;
+package me.polles;
 
 public class Cliente {
 	private int id;

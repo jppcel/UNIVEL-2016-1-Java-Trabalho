@@ -1,4 +1,4 @@
-package polles.me;
+package me.polles;
 
 import java.util.List;
 
