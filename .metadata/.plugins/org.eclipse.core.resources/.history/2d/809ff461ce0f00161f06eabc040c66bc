@@ -1,0 +1,12 @@
+package me.polles;
+
+
+@Tabela("CLIENTE")
+public class Cliente {
+	private int id;
+	private String nome;
+	private String endereco;
+	private String telefone;
+	private EstadoCivil estadoCivil;
+
+}
