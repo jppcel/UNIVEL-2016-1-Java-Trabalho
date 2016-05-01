@@ -1,14 +1,16 @@
 package polles.me;
 
+import java.util.List;
+
 public interface Dao<T, K> {
 
-	publicvoid salvar(T t);
+	public void salvar(T t);
 	
 	public T buscar(K k);
 	
-	publicvoid atualizar(T t);
+	public void atualizar(T t);
 	
-	publicvoid excluir(K k);
+	public void excluir(K k);
 	
 	public List<T> listarTodos();
 
