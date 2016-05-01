@@ -12,6 +12,10 @@ public interface Dao<T, K> {
 	
 	public void excluir(K k);
 	
+	public void drop(T t);
+	
+	public void create(K k);
+	
 	public List<T> listarTodos();
 
 }
