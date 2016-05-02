@@ -79,8 +79,9 @@ public class SQLGenI extends SqlGen {
 			}
 			StBu.append(", PRIMARY KEY(").append(pk.toString()).append(")");
 			StBu.append(");");
-			System.out.println("SQL GENERATED: "+ StBu.toString());
-			return StBu.toString();
+			String Return = StBu.toString();
+			System.out.println("SQL GENERATED: "+ Return);
+			return Return;
 		}catch(SecurityException e){
 			throw new RuntimeException(e);
 		}
@@ -101,15 +102,16 @@ public class SQLGenI extends SqlGen {
 			TableName = Cla.getSimpleName().toUpperCase();
 		}
 		
-		StBu.append("DROP TABLE ").append(TableName).append(";");
+		StBu.append("DROP TABLE ").append(TableName).append(" IF EXISTS;");
 		String Return = StBu.toString();
-		System.out.println("SQL GERADO: "+Return);
+		System.out.println("SQL GENERATED: "+Return);
 		return Return;
 	}
 
 	@Override
 	protected PreparedStatement getSqlInsert(Connection con, Object obj) {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

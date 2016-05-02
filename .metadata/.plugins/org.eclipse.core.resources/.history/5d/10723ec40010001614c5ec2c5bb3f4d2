@@ -11,7 +11,8 @@ public class DaoI<T, K> implements Dao<T, K> {
 	
 	private static Connection abrirConexao() throws SQLException {
 
-		String url = "jdbc:h2:~/PollesDB2";
+//        Class.forName("org.h2.Driver");
+		String url = "jdbc:h2:~/PollesDB";
 		String user = "sa";
 		String pass = "sa";
 		Connection c = DriverManager.getConnection(url, user, pass);
@@ -84,9 +85,7 @@ public class DaoI<T, K> implements Dao<T, K> {
 		Connection Con = null;
 		try {
 			Con = abrirConexao();
-			String SDr = sql.getDropTable(Con, t);
-			PreparedStatement PSDr = Con.prepareStatement(SDr);
-			PSDr.executeUpdate();
+			sql.getDropTable(Con, t);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -105,9 +104,7 @@ public class DaoI<T, K> implements Dao<T, K> {
 		Connection Con = null;
 		try {
 			Con = abrirConexao();
-			String SCr = sql.getCreateTable(Con, t);
-			PreparedStatement PSCr = Con.prepareStatement(SCr);
-			PSCr.executeUpdate();
+			sql.getCreateTable(Con, t);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
