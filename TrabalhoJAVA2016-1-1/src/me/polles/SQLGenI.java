@@ -28,8 +28,8 @@ public class SQLGenI extends SqlGen {
 			StBu.append("CREATE TABLE ").append(TableName).append(" (");
 			Field[] attr = Cla.getDeclaredFields();
 
-			int found;
-			String pk = "";
+			int found = 0;
+			StringBuilder pk = new StringBuilder();
 			for(int i = 0; i < attr.length; i++){
 				Field fie = attr[i];
 				
@@ -46,13 +46,13 @@ public class SQLGenI extends SqlGen {
 					
 					if(annotationColumn.pk()){
 						if(found > 0){
-							pk = pk + ", ";
+							pk.append(", ");
 						}
 						
 						if(annotationColumn.nome().isEmpty()){
-							pk = pk + fie.getName().toUpperCase();
+							pk.append(fie.getName().toUpperCase());
 						}else{
-							pk = pk + annotationColumn.nome();
+							pk.append(annotationColumn.nome());
 						}
 						found++;
 					}
@@ -60,7 +60,7 @@ public class SQLGenI extends SqlGen {
 					ColumnName = fie.getName().toUpperCase();
 				}
 				
-				Class<?> AttrType = attr.getType();
+				Class<?> AttrType = fie.getType();
 				
 				if(AttrType.equals(String.class)){
 					ColumnType = "VARCHAR(150)";
@@ -77,8 +77,8 @@ public class SQLGenI extends SqlGen {
 				}
 				StBu.append(ColumnName).append(" ").append(ColumnType);
 			}
-			StBu.append(", PRIMARY KEY(").append(pk).append(")");
-			StBu.append(")");
+			StBu.append(", PRIMARY KEY(").append(pk.toString()).append(")");
+			StBu.append(");");
 			System.out.println("SQL GENERATED: "+ StBu.toString());
 			return StBu.toString();
 		}catch(SecurityException e){
@@ -89,8 +89,8 @@ public class SQLGenI extends SqlGen {
 	@Override
 	protected String getDropTable(Connection con, Object obj) {
 		// TODO Auto-generated method stub
-		Class Cla = obj.getClass();
-		StringBuilder StBu = new StringBuild();
+		Class<?> Cla = obj.getClass();
+		StringBuilder StBu = new StringBuilder();
 		
 		String TableName;
 

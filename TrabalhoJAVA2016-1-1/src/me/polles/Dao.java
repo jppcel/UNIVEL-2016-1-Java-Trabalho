@@ -14,7 +14,7 @@ public interface Dao<T, K> {
 	
 	public void drop(T t);
 	
-	public void create(K k);
+	public void criarTabela(T t);
 	
 	public List<T> listarTodos();
 

@@ -2,6 +2,7 @@ package me.polles;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Driver;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
@@ -10,7 +11,8 @@ public class DaoI<T, K> implements Dao<T, K> {
 	
 	private static Connection abrirConexao() throws SQLException {
 
-		String url = "jdbc:h2:~/PollesDB";
+//        Class.forName("org.h2.Driver");
+		String url = "jdbc:h2:~/PollesDB2";
 		String user = "sa";
 		String pass = "sa";
 		Connection c = DriverManager.getConnection(url, user, pass);

@@ -18,7 +18,7 @@ public class Cliente {
 	@Coluna(nome="TELEFONE")
 	private String telefone;
 
-	@Coluna(nome="CLESTADOCIVIL")
+	@Coluna(nome="ESTADOCIVIL")
 	private EstadoCivil estadoCivil;
 
 	//Função para instanciar o objeto sem os dados...
