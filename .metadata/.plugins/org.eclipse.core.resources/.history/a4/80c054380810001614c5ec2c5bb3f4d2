@@ -1,29 +1,28 @@
 package me.polles;
 
-// Enum de EstadoCivil
 public enum EstadoCivil {
 	
-	// Itens da Enum
-	CASADO("Casado", 1),
-	SOLTEIRO("Solteiro", 2), 
+	SOLTEIRO("Solteiro", 1), 
+	CASADO("Casado", 2),
 	VIUVO("Viuvo", 3);
 	
-	// Atributos de cada Enum
 	private String estadoCivil;
 	private final int id;
 	
-	// Método principal para retornar os dados da enum
+	private EstadoCivil(String estadoCivil){
+		this.estadoCivil = estadoCivil;
+	}
+	
 	private EstadoCivil(String estadoCivil, int id){
 		this.estadoCivil = estadoCivil;
 		this.id = id;
 	}
 	
-	// Setters para os itens da enum
 	public String getEstadoCivil(){
 		return estadoCivil;
 	}
 	
-	public int getID(){
+	public String getID(){
 		return id;
 	}
 

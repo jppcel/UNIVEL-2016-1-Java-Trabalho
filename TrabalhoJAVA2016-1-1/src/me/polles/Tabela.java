@@ -8,8 +8,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 
+// Interface de Tabela
 public @interface Tabela {
-
+	// Valor referente ao nome da tabela...
 	String value()default "";
 	
 }
