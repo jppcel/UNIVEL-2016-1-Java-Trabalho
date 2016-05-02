@@ -1,13 +1,17 @@
 package me.polles;
 
 public enum EstadoCivil {
-	
-	SOLTEIRO("Solteiro", 1), 
-	CASADO("Casado", 2),
+
+	CASADO("Casado", 1),
+	SOLTEIRO("Solteiro", 2), 
 	VIUVO("Viuvo", 3);
 	
 	private String estadoCivil;
 	private final int id;
+	
+	public EstadoCivil(String estadoCivil){
+		this.estadoCivil = estadoCivil;
+	}
 	
 	private EstadoCivil(String estadoCivil, int id){
 		this.estadoCivil = estadoCivil;

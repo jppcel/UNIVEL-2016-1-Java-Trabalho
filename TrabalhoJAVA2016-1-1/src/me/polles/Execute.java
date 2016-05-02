@@ -13,6 +13,7 @@ public class Execute {
 
 		DC.drop(Cl1);
 		DC.criarTabela(Cl1);
+//		DC.salvar(Cl1);
 	}
 	
 }
