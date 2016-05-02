@@ -30,8 +30,8 @@ public class Execute {
 		DC.buscar(Cl1);
 		
 		// Altera o Cliente 1
-		Cl1.setNome("João P.");
-		DC.atualizar(Cl1);
+//		Cl1.setNome("João P.");
+//		DC.atualizar(Cl1);
 		
 		// Exclui o Cliente 2
 		DC.excluir(Cl2);
