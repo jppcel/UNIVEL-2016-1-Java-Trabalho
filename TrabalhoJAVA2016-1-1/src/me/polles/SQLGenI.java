@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import org.h2.jdbc.JdbcSQLException;
+
 public class SQLGenI extends SqlGen {
 
 
@@ -34,8 +36,6 @@ public class SQLGenI extends SqlGen {
 			StBu.append("CREATE TABLE ").append(TableName).append(" (");
 			Field[] attr = Cla.getDeclaredFields();
 
-			// Criadas variaveis de controle e stringbuilder para armazenar as pks
-			int found = 0;
 			StringBuilder pk = new StringBuilder();
 			int ColumnSize = 0;
 			// For para varrer todos os atributos da classe
@@ -65,7 +65,6 @@ public class SQLGenI extends SqlGen {
 						}else{
 							pk.append(annotationColumn.nome());
 						}
-						found++;
 					}
 					if(AttrType.equals(String.class)){
 						ColumnSize = annotationColumn.tamanho();
@@ -231,12 +230,39 @@ public class SQLGenI extends SqlGen {
 			TableName = Cla.getSimpleName().toUpperCase();
 		
 		}
-		
-		StBu.append("SELECT * FROM ").append(TableName).append(";");
-		System.out.println(StBu.toString());
+
+		StBu.append("SELECT ");
+		Field[] attr = Cla.getDeclaredFields();
+		for(int i=0; i < attr.length; i++){
+			Field fie = attr[i];
+			String ColumnName;
+			if(fie.isAnnotationPresent(Coluna.class)){
+				Coluna ColumnAnnotation = fie.getAnnotation(Coluna.class);
+				
+				if(ColumnAnnotation.nome().isEmpty()){
+					ColumnName = fie.getName().toUpperCase();
+				}else{
+					ColumnName = ColumnAnnotation.nome();
+				}
+				
+			}else{
+				ColumnName = fie.getName().toUpperCase();
+			}
+			StBu.append(ColumnName).append(" ");
+			if(i+1 < attr.length){
+				StBu.append(", ");
+			}
+		}
+		StBu.append(" FROM ").append(TableName).append(";");
+		String SQL = StBu.toString();
+		System.out.println(SQL);
 		try {
-			PreparedStatement PSAll = con.prepareStatement(StBu.toString());
+			PreparedStatement PSAll = con.prepareStatement(SQL);
+			PSAll.execute();
 			return PSAll;
+		} catch (JdbcSQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -268,17 +294,17 @@ public class SQLGenI extends SqlGen {
 
 		Field[] attr = Cla.getDeclaredFields();
 		
-		int found = 0;
+		int found = 0, id = 0;
 		
-		for(int i = 0; i < attr.length; i++){
+		
+		for(int i = 0; i < attr.length && found == 0; i++){
 			Field fie = attr[i];
 			
-			String ColumnName;
+			String ColumnName = null;
 			
 			Coluna annotationColumn = fie.getAnnotation(Coluna.class);
-
-			ColumnName = annotationColumn.nome();
-			if(fie.isAnnotationPresent(Coluna.class)){				
+			if(fie.isAnnotationPresent(Coluna.class)){		
+				ColumnName = annotationColumn.nome();		
 				if(annotationColumn.pk()){					
 					if(annotationColumn.nome().isEmpty()){
 						ColumnName = fie.getName().toUpperCase();
@@ -286,6 +312,15 @@ public class SQLGenI extends SqlGen {
 						ColumnName = annotationColumn.nome();
 					}
 					found++;
+					try {
+						id = fie.getInt(obj);
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			if(found == 1){
@@ -301,36 +336,12 @@ public class SQLGenI extends SqlGen {
 		PreparedStatement PSSea = null;
 		try {
 			PSSea = con.prepareStatement(SQL);
-			for(int i = 0, j = 0; i < attr.length; i++){
-				Field fie = attr[i];
-				
-				Coluna annotationColumn = fie.getAnnotation(Coluna.class);
-				
-				if(fie.isAnnotationPresent(Coluna.class)){				
-					if(annotationColumn.pk()){	
-						fie.setAccessible(true);
-						
-						if(fie.getType().equals(String.class)){
-							PSSea.setString(j+1, String.valueOf(fie.get(obj)));
-						}else if(fie.getType().equals(int.class)){
-							PSSea.setInt(j+1, fie.getInt(obj));
-						}else if(fie.getType().equals(EstadoCivil.class)){
-							String estadoCivil = String.valueOf(fie.get(obj));
-							EstadoCivil EC = EstadoCivil.valueOf(estadoCivil);
-							PSSea.setInt(j+1, EC.getID());
-						}
-						j++;
-					}
-				}
-			}
+			PSSea.setInt(0, id);
 			return PSSea;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

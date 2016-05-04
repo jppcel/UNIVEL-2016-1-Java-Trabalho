@@ -128,16 +128,17 @@ public class DaoI implements Dao<Cliente, Integer> {
 			PSAll.executeQuery();
 			ResultSet RS = PSAll.getResultSet();
 //			boolean VRS = true;
-			int i = 0;
-			do{
-				if(i > 0){
-					RS.next();
+			if(RS.wasNull()){
+				while(RS.next()){
+					
+					cli = new Cliente(RS.getInt("ID"), RS.getString("NOME"), RS.getString("ENDERECO"), RS.getString("TELEFONE"), EstadoCivil.values()[RS.getInt("ESTADOCIVIL")]);
+					LR.add(cli);
+					System.out.println(RS.getString("NOME"));
+					
 				}
-				
-				cli = new Cliente(RS.getInt("ID"), RS.getString("NOME"), RS.getString("ENDERECO"), RS.getString("TELEFONE"), EstadoCivil.values()[RS.getInt("ESTADOCIVIL")]);
-				LR.add(cli);
-				
-			}while(!RS.isLast());
+			}else{
+				System.out.println("NULO!");
+			}
 			
 			RS.close();
 			return LR;
