@@ -60,10 +60,6 @@ public class SQLGenI extends SqlGen {
 					}
 					
 					if(annotationColumn.pk()){
-						if(found > 0){
-							pk.append(", ");
-						}
-						
 						if(annotationColumn.nome().isEmpty()){
 							pk.append(fie.getName().toUpperCase());
 						}else{
@@ -277,8 +273,6 @@ public class SQLGenI extends SqlGen {
 		for(int i = 0; i < attr.length; i++){
 			Field fie = attr[i];
 			
-			int f = 0;
-			
 			String ColumnName;
 			
 			Coluna annotationColumn = fie.getAnnotation(Coluna.class);
@@ -291,19 +285,11 @@ public class SQLGenI extends SqlGen {
 					}else{
 						ColumnName = annotationColumn.nome();
 					}
-					f++;
+					found++;
 				}
 			}
-			if(f == 1){
-				
-				if(found > 0){
-					StBu.append(" && ");
-				}
-				
-				StBu.append(ColumnName).append(" = ?");
-				
-				found++;
-				
+			if(found == 1){
+				StBu.append(ColumnName).append(" = ?");				
 			}
 		}
 		

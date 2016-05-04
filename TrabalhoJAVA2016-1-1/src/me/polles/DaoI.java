@@ -42,11 +42,19 @@ public class DaoI implements Dao<Cliente, Integer> {
 		// Instancia o SqlGen e o Connection
 		SqlGen sql = new SQLGenI();
 		Connection Con = null;
+		Cliente cli = new Cliente();
+		cli.setId(k);
 		try {
 			// Abre a conexao e faz as devidas consultas
 			Con = abrirConexao();
-			PreparedStatement PSSea = sql.getSqlSelectById(Con, k);
+			PreparedStatement PSSea = sql.getSqlSelectById(Con, cli);
 			PSSea.executeQuery();
+			ResultSet RS = PSSea.getResultSet();
+			cli.setNome(RS.getString("NOME"));
+			cli.setEndereco(RS.getString("ENDERECO"));
+			cli.setTelefone(RS.getString("TELEFONE"));
+			cli.setEstadoCivil(EstadoCivil.values()[RS.getInt("ESTADOCIVIL")]);
+			return cli;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

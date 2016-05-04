@@ -34,7 +34,7 @@ public class Execute {
 		}
 		
 		// Busca o Cliente 1
-//		DC.buscar(Cl1.getId());
+		DC.buscar(Cl1.getId());
 		
 		// Altera o Cliente 1
 //		Cl1.setNome("Joao P.");
