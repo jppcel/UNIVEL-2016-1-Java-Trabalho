@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <dirs>
+<entry loc="/usr/lib64/jvm/java-1.8.0-openjdk-1.8.0" stamp="1462387340000"/>
 <entry loc="/usr/lib/jvm" stamp="1461175588000"/>
 <entry loc="/opt/eclipse/jdk" stamp="1462146042000"/>
-<entry loc="C:\Program Files\Java\jre1.8.0_91" stamp="1462210955442"/>
+<entry loc="C:\Program Files\Java\jdk1.8.0_91" stamp="1462369604330"/>
+<entry loc="C:\Program Files\Java\jre1.8.0_91" stamp="1462369600767"/>
+<entry loc="/opt/java" stamp="1462389093000"/>
 </dirs>

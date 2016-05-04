@@ -2,18 +2,17 @@ package me.polles;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Driver;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DaoI<Cliente, Integer> implements Dao<Cliente, Integer> {
+public class DaoI implements Dao<Cliente, Integer> {
 	
 	private static Connection abrirConexao() throws SQLException {
 
-		// Abre a conexão
+		// Abre a conexao
 		String url = "jdbc:h2:~/PollesDB2";
 		String user = "sa";
 		String pass = "sa";
@@ -21,7 +20,6 @@ public class DaoI<Cliente, Integer> implements Dao<Cliente, Integer> {
 		return c;
 
 	}
-
 	@Override
 	public void salvar(Cliente t) {
 		// TODO Auto-generated method stub
@@ -29,7 +27,7 @@ public class DaoI<Cliente, Integer> implements Dao<Cliente, Integer> {
 		SqlGen sql = new SQLGenI();
 		Connection Con = null;
 		try {
-			// Abre a conexão e faz as devidas consultas
+			// Abre a conexao e faz as devidas consultas
 			Con = abrirConexao();
 			PreparedStatement PSIns = sql.getSqlInsert(Con, t);
 			PSIns.executeUpdate();
@@ -44,7 +42,6 @@ public class DaoI<Cliente, Integer> implements Dao<Cliente, Integer> {
 		// Instancia o SqlGen e o Connection
 		SqlGen sql = new SQLGenI();
 		Connection Con = null;
-		Object teste = new Object();
 		try {
 			// Abre a conexao e faz as devidas consultas
 			Con = abrirConexao();
@@ -82,7 +79,9 @@ public class DaoI<Cliente, Integer> implements Dao<Cliente, Integer> {
 		try {
 			// Abre a conexao e faz as devidas consultas
 			Con = abrirConexao();
-			PreparedStatement PSExc = sql.getSqlDeleteById(Con, k);
+			Cliente cli = new Cliente();
+			cli.setId(k);
+			PreparedStatement PSExc = sql.getSqlDeleteById(Con, cli);
 			PSExc.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -113,26 +112,25 @@ public class DaoI<Cliente, Integer> implements Dao<Cliente, Integer> {
 		SqlGen sql = new SQLGenI();
 		Connection Con = null;
 		List<Cliente> LR = new ArrayList<Cliente>();
-		Cliente cli;
+		Cliente cli = new Cliente();
 		try {
 //		 Abre a conexao e faz as devidas consultas
 			Con = abrirConexao();
 			PreparedStatement PSAll = sql.getSqlSelectAll(Con, cli);
 			PSAll.executeQuery();
 			ResultSet RS = PSAll.getResultSet();
-			boolean VRS = true;
+//			boolean VRS = true;
 			int i = 0;
 			do{
 				if(i > 0){
 					RS.next();
 				}
 				
-				cli = new Cliente();
-				
-				
-				
+				cli = new Cliente(RS.getInt("ID"), RS.getString("NOME"), RS.getString("ENDERECO"), RS.getString("TELEFONE"), EstadoCivil.values()[RS.getInt("ESTADOCIVIL")]);
+				LR.add(cli);
 				
 			}while(!RS.isLast());
+			
 			RS.close();
 			return LR;
 		} catch (SQLException e) {

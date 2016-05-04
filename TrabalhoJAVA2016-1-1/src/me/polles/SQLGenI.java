@@ -7,8 +7,6 @@ import java.sql.SQLException;
 
 public class SQLGenI extends SqlGen {
 
-	private Field[] values;
-	private Field[] pKs;
 
 	@Override
 	protected String getCreateTable(Connection con, Object obj) {
@@ -16,11 +14,11 @@ public class SQLGenI extends SqlGen {
 		// Pega a Classe do Objeto
 		Class<?> Cla = obj.getClass();
 		try{
-			// Cria a vari·vel com o StringBuilder e a string com o nome da tabela
+			// Cria a variavel com o StringBuilder e a string com o nome da tabela
 			StringBuilder StBu = new StringBuilder();
 			String TableName;
 			
-			// Faz a verificaÁ„o para decidir o nome da tabela
+			// Faz a verificacao para decidir o nome da tabela
 			if(Cla.isAnnotationPresent(Tabela.class)){
 			
 				Tabela annotationTable = Cla.getAnnotation(Tabela.class);
@@ -32,11 +30,11 @@ public class SQLGenI extends SqlGen {
 			
 			}
 			
-			// ComeÁa de fato a criaÁ„o do SQL para gerar o SQL
+			// Comeca de fato a criacao do SQL para gerar o SQL
 			StBu.append("CREATE TABLE ").append(TableName).append(" (");
 			Field[] attr = Cla.getDeclaredFields();
 
-			// Criadas vari·veis de controle e stringbuilder para armazenar as pks
+			// Criadas variaveis de controle e stringbuilder para armazenar as pks
 			int found = 0;
 			StringBuilder pk = new StringBuilder();
 			int ColumnSize = 0;
@@ -45,14 +43,14 @@ public class SQLGenI extends SqlGen {
 				// Pega o atributo
 				Field fie = attr[i];
 				
-				// Cria vari√°veis de nome e tipo da coluna
+				// Cria variaveis de nome e tipo da coluna
 				String ColumnName;
 				String ColumnType;
 
 				// Pega o Tipo da Coluna
 				Class<?> AttrType = fie.getType();
 				
-				// Faz toda a verifica√ß√£o para saber o nome da coluna, seu tipo e se a mesma √© PK
+				// Faz toda a verificacao para saber o nome da coluna, seu tipo e se a mesma √© PK
 				if(fie.isAnnotationPresent(Coluna.class)){
 					Coluna annotationColumn = fie.getAnnotation(Coluna.class);
 					if(annotationColumn.nome().isEmpty()){
@@ -96,10 +94,10 @@ public class SQLGenI extends SqlGen {
 					StBu.append(",");
 				}
 				
-				// Coloca as informa√ß√µes no SQL
+				// Coloca as informacoes no SQL
 				StBu.append(ColumnName).append(" ").append(ColumnType);
 			}
-			// Informa quais s√£o as PKs e finaliza o SQL
+			// Informa quais sao as PKs e finaliza o SQL
 			StBu.append(", PRIMARY KEY(").append(pk.toString()).append(")");
 			StBu.append(");");
 			// Guarda o SQL em uma vari√°vel e mostra na tela qual o SQL.
@@ -154,7 +152,6 @@ public class SQLGenI extends SqlGen {
 		StBu.append("INSERT INTO ").append(TableName).append(" (");
 		
 		Field[] attr = Cla.getDeclaredFields();
-		String[] values;
 		for(int i = 0; i < attr.length; i++){
 			Field fie = attr[i];
 			
@@ -357,6 +354,7 @@ public class SQLGenI extends SqlGen {
 
 	@Override
 	protected PreparedStatement getSqlUpdateById(Connection con, Object obj) {
+		return null;
 		// TODO Auto-generated method stub
 //		Class<?> Cla = obj.getClass();
 //		StringBuilder StBu = new StringBuilder();
@@ -522,10 +520,10 @@ public class SQLGenI extends SqlGen {
 		
 		int found = 0;
 		
-		for(int i = 0; i < attr.length; i++){
+		Field pk = null;
+		
+		for(int i = 0; i < attr.length && found == 0; i++){
 			Field fie = attr[i];
-			
-			int f = 0;
 			
 			String ColumnName;
 			
@@ -539,18 +537,14 @@ public class SQLGenI extends SqlGen {
 					}else{
 						ColumnName = annotationColumn.nome();
 					}
-					f++;
+					found++;
 				}
 			}
-			if(f == 1){
-				
-				if(found > 0){
-					StBu.append(" && ");
-				}
+			if(found == 1){
 				
 				StBu.append(ColumnName).append(" = ?");
+				pk = fie;
 				
-				found++;
 				
 			}
 		}
@@ -563,28 +557,7 @@ public class SQLGenI extends SqlGen {
 		PreparedStatement PSDel = null;
 		try {
 			PSDel = con.prepareStatement(SQL);
-			for(int i = 0, j = 0; i < attr.length; i++){
-				Field fie = attr[i];
-				
-				Coluna annotationColumn = fie.getAnnotation(Coluna.class);
-				
-				if(fie.isAnnotationPresent(Coluna.class)){				
-					if(annotationColumn.pk()){	
-						fie.setAccessible(true);
-						
-						if(fie.getType().equals(String.class)){
-							PSDel.setString(j+1, String.valueOf(fie.get(obj)));
-						}else if(fie.getType().equals(int.class)){
-							PSDel.setInt(j+1, fie.getInt(obj));
-						}else if(fie.getType().equals(EstadoCivil.class)){
-							String estadoCivil = String.valueOf(fie.get(obj));
-							EstadoCivil EC = EstadoCivil.valueOf(estadoCivil);
-							PSDel.setInt(j+1, EC.getID());
-						}
-						j++;
-					}
-				}
-			}
+			PSDel.setInt(0, pk.getInt(obj));
 			return PSDel;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

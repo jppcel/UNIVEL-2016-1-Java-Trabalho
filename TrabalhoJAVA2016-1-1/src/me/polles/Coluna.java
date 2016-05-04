@@ -15,7 +15,7 @@ public @interface Coluna {
 	String nome() default "";
 	// int para o tamanho do campo(usado apenas em string)
 	int tamanho() default 100;
-	// boolean para saber se é uma primary key ou não...
+	// boolean para saber se eh uma primary key ou nao...
 	boolean pk() default false;
 	
 }

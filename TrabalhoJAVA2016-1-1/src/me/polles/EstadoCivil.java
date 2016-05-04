@@ -12,13 +12,13 @@ public enum EstadoCivil {
 	private String estadoCivil;
 	private final int id;
 	
-	// Método principal para retornar os dados da enum
+	// Metodo principal para retornar os dados da enum
 	private EstadoCivil(String estadoCivil, int id){
 		this.estadoCivil = estadoCivil;
 		this.id = id;
 	}
 	
-	// Setters para os itens da enum
+	// Getters para os itens da enum
 	public String getEstadoCivil(){
 		return estadoCivil;
 	}

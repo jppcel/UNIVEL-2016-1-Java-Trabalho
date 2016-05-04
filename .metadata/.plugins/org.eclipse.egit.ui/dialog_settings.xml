@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="CommitDialog.authorValues">
+		<item value="JoãoPaulo &lt;joaopaulopolles@gmail.com&gt;"/>
 		<item value="João Paulo Polles &lt;joaopaulopolles@gmail.com&gt;"/>
 	</list>
 	<list key="CommitDialog.committerValues">
+		<item value="JoãoPaulo &lt;joaopaulopolles@gmail.com&gt;"/>
 		<item value="João Paulo Polles &lt;joaopaulopolles@gmail.com&gt;"/>
 	</list>
 	<section name="GitCommitMessageComponent">
 	</section>
 	<section name="org.eclipse.egit.ui.internal.staging.StagingView">
-		<item value="200,200" key="STAGING_SASH_FORM_WEIGHT"/>
+		<item value="500,500" key="STAGING_SASH_FORM_WEIGHT"/>
 		<item value="false" key="sortItemState"/>
-		<item value="375,621" key="HORIZONTAL_SASH_FORM_WEIGHT"/>
+		<item value="376,623" key="HORIZONTAL_SASH_FORM_WEIGHT"/>
 	</section>
 </section>
