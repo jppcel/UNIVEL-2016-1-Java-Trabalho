@@ -8,9 +8,9 @@ public class Execute {
 		Dao<Cliente, Cliente> DC = new DaoI<Cliente, Cliente>();
 		
 		//Instancia os objetos de clientes
-		Cliente Cl1 = new Cliente(1,"João","Rua 1, 2","93258475", EstadoCivil.SOLTEIRO);
-		Cliente Cl2 = new Cliente(2,"Paulo","Rua A, 43", "87452155", EstadoCivil.VIUVO);
-		Cliente Cl3 = new Cliente(3,"Polles","Rua NULL, 94", "78525821", EstadoCivil.CASADO);
+		Cliente Cl1 = new Cliente(1,"Jo�o","Rua 1, 2","(93) 258475", EstadoCivil.SOLTEIRO);
+		Cliente Cl2 = new Cliente(2,"Paulo","Rua A, 43", "(87) 452155", EstadoCivil.VIUVO);
+		Cliente Cl3 = new Cliente(3,"Polles","Rua NULL, 94", "(78) 525821", EstadoCivil.CASADO);
 		
 		// Apaga a tabela relativa a cliente(se existir)
 		DC.drop(new Cliente());
@@ -24,17 +24,17 @@ public class Execute {
 		DC.salvar(Cl3);
 		
 		// Lista todos os clientes
-//		DC.listarTodos(Cl1);
+		DC.listarTodos(Cl1);
 		
 		// Busca o Cliente 1
-		DC.buscar(Cl1);
+		DC.buscar(Cl1.getId());
 		
 		// Altera o Cliente 1
 //		Cl1.setNome("João P.");
 //		DC.atualizar(Cl1);
 		
 		// Exclui o Cliente 2
-		DC.excluir(Cl2);
+		DC.excluir(Cl2.getId());
 		
 		// Lista todos os clientes
 //		DC.listarTodos(Cl1);

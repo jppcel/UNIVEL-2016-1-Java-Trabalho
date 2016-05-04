@@ -5,7 +5,7 @@ package me.polles;
 public class Cliente {
 	
 	
-	//Atributos da Classe e a annotation para informar se é a PK ou se é um outro campo e seu devido nome...
+	//Atributos da Classe e a annotation para informar se eh a PK ou se eh um outro campo e seu devido nome...
 	@Coluna(pk=true)
 	private int id;
 	
@@ -21,12 +21,12 @@ public class Cliente {
 	@Coluna(nome="ESTADOCIVIL")
 	private EstadoCivil estadoCivil;
 
-	//Função para instanciar o objeto sem os dados...
+	//Funcao para instanciar o objeto sem os dados...
 	public Cliente() {
 		this(0, null, null, null, null);
 	}
 	
-	// Função para instanciar com os dados necessários...
+	// Funcao para instanciar com os dados necessarios...
 	public Cliente(int ID, String Nome, String Endereco, String Telefone, EstadoCivil estadoCivil){
 		super();
 		this.id = ID;

@@ -16,11 +16,11 @@ public class SQLGenI extends SqlGen {
 		// Pega a Classe do Objeto
 		Class<?> Cla = obj.getClass();
 		try{
-			// Cria a vari√°vel com o StringBuilder e a string com o nome da tabela
+			// Cria a vari·vel com o StringBuilder e a string com o nome da tabela
 			StringBuilder StBu = new StringBuilder();
 			String TableName;
 			
-			// Faz a verifica√ß√£o para decidir o nome da tabela
+			// Faz a verificaÁ„o para decidir o nome da tabela
 			if(Cla.isAnnotationPresent(Tabela.class)){
 			
 				Tabela annotationTable = Cla.getAnnotation(Tabela.class);
@@ -32,11 +32,11 @@ public class SQLGenI extends SqlGen {
 			
 			}
 			
-			// Come√ßa de fato a cria√ß√£o do SQL para gerar o SQL
+			// ComeÁa de fato a criaÁ„o do SQL para gerar o SQL
 			StBu.append("CREATE TABLE ").append(TableName).append(" (");
 			Field[] attr = Cla.getDeclaredFields();
 
-			// Criadas vari√°veis de controle e stringbuilder para armazenar as pks
+			// Criadas vari·veis de controle e stringbuilder para armazenar as pks
 			int found = 0;
 			StringBuilder pk = new StringBuilder();
 			int ColumnSize = 0;
