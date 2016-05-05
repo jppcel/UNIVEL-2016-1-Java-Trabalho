@@ -6,7 +6,7 @@
 <listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
 <listEntry value="1"/>
 </listAttribute>
-<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/java"/>
+<stringAttribute key="org.eclipse.jdt.launching.JRE_CONTAINER" value="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre"/>
 <stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="me.polles.Execute"/>
 <stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="TrabalhoJAVA2016-1-1"/>
 </launchConfiguration>

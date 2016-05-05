@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.h2.jdbc.JdbcSQLException;
 
@@ -289,10 +291,31 @@ public class SQLGenI extends SqlGen {
 			TableName = Cla.getSimpleName().toUpperCase();
 		
 		}
-		
-		StBu.append("SELECT * FROM ").append(TableName).append(" WHERE ");
 
+		StBu.append("SELECT ");
 		Field[] attr = Cla.getDeclaredFields();
+		for(int i=0; i < attr.length; i++){
+			Field fie = attr[i];
+			String ColumnName;
+			if(fie.isAnnotationPresent(Coluna.class)){
+				Coluna ColumnAnnotation = fie.getAnnotation(Coluna.class);
+				
+				if(ColumnAnnotation.nome().isEmpty()){
+					ColumnName = fie.getName().toUpperCase();
+				}else{
+					ColumnName = ColumnAnnotation.nome();
+				}
+				
+			}else{
+				ColumnName = fie.getName().toUpperCase();
+			}
+			StBu.append(ColumnName).append(" ");
+			if(i+1 < attr.length){
+				StBu.append(", ");
+			}
+		}		
+		StBu.append(" FROM ").append(TableName).append(" WHERE ");
+
 		
 		int found = 0, id = 0;
 		
@@ -305,7 +328,8 @@ public class SQLGenI extends SqlGen {
 			Coluna annotationColumn = fie.getAnnotation(Coluna.class);
 			if(fie.isAnnotationPresent(Coluna.class)){		
 				ColumnName = annotationColumn.nome();		
-				if(annotationColumn.pk()){					
+				if(annotationColumn.pk()){				
+					fie.setAccessible(true);
 					if(annotationColumn.nome().isEmpty()){
 						ColumnName = fie.getName().toUpperCase();
 					}else{
@@ -336,7 +360,10 @@ public class SQLGenI extends SqlGen {
 		PreparedStatement PSSea = null;
 		try {
 			PSSea = con.prepareStatement(SQL);
-			PSSea.setInt(0, id);
+			PSSea.setInt(1, id);
+			
+			PSSea.executeQuery();
+			
 			return PSSea;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -345,151 +372,133 @@ public class SQLGenI extends SqlGen {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return PSSea;
+
+		return null;
 	}
 
 	@Override
 	protected PreparedStatement getSqlUpdateById(Connection con, Object obj) {
-		return null;
-		// TODO Auto-generated method stub
-//		Class<?> Cla = obj.getClass();
-//		StringBuilder StBu = new StringBuilder();
-//		
-//		String TableName;
-//		if(Cla.isAnnotationPresent(Tabela.class)){
-//			
-//			Tabela annotationTable = Cla.getAnnotation(Tabela.class);
-//			TableName = annotationTable.value();
-//		
-//		}else{
-//		
-//			TableName = Cla.getSimpleName().toUpperCase();
-//		
-//		}
-//		
-//		StBu.append("UPDATE ").append(TableName).append(" SET ");
-//		
-//		Field[] attr = Cla.getDeclaredFields();
-//		StringBuilder pk = new StringBuilder();
-//		int pks = 0;
-//		pKs = null;
-//		values = null;
-//		for(int i = 0, P = 0, V = 0; i < attr.length; i++){
-//			Field fie = attr[i];
-//			int isPK = 0;
-//			
-//			String ColumnName;
-//			if(fie.isAnnotationPresent(Coluna.class)){
-//				Coluna ColumnAnnotation = fie.getAnnotation(Coluna.class);
-//				if(ColumnAnnotation.pk()){
-//					if(pks > 0){
-//						pk.append(" && ");
-//					}
-//					if(ColumnAnnotation.nome().isEmpty()){
-//						ColumnName = fie.getName().toUpperCase();
-//					}else{
-//						ColumnName = ColumnAnnotation.nome();
-//					}
-//					
-//					pk.append(ColumnName).append(" = ?");
-//					if(i+1 < attr.length){
-//						StBu.append(", ");
-//					}
-//					
-//					pks++;
-//					isPK = 1;
-//				}else{
-//					if(ColumnAnnotation.nome().isEmpty()){
-//						ColumnName = fie.getName().toUpperCase();
-//					}else{
-//						ColumnName = ColumnAnnotation.nome();
-//					}
-//					
-//					if(i > 0){
-//						StBu.append(", ");
-//					}
-//					
-//					StBu.append(ColumnName).append(" = ?");
-//					if(i+1 < attr.length){
-//						StBu.append(", ");
-//					}
-//				}
-//				
-//			}else{
-//				ColumnName = fie.getName().toUpperCase();
-//				
-//				if(i > 0){
-//					StBu.append(", ");
-//				}
-//				
-//				StBu.append(ColumnName).append(" = ?");
-//				if(i+1 < attr.length){
-//					StBu.append(", ");
-//				}
-//			}
-//			
-//			if(isPK == 1){
-//				pKs[P] = fie;
-//				P++;
-//			}else{
-//				values[V] = fie;
-//				V++;
-//			}
-//		}
-//		StBu.append(" WHERE ").append(pk.toString());
-//		
-//		
-//		
-//		String SQL = StBu.toString();
-//		System.out.println(SQL);
-//				
-//		try {
-//			PreparedStatement PSUp = con.prepareStatement(SQL);
-//			for(int i = 0; i < values.length; i++){
-//				Field fie = values[i];
-//				
-//				fie.setAccessible(true);
-//				if(fie.getType().equals(String.class)){
-//					PSUp.setString(i+1, String.valueOf(fie.get(obj)));
-//				}else if(fie.getType().equals(int.class)){
-//					PSUp.setInt(i+1, fie.getInt(obj));
-//				}else if(fie.getType().equals(EstadoCivil.class)){
-//					String estadoCivil = String.valueOf(fie.get(obj));
-//					EstadoCivil EC = EstadoCivil.valueOf(estadoCivil);
-//					PSUp.setInt(i+1, EC.getID());
-//				} else {
-//					throw new RuntimeException("Unsupported type.");
-//				}
-//			}
-//			for(int i = 0; i < pKs.length; i++){
-//				Field fie = pKs[i];
-//				
-//				fie.setAccessible(true);
-//				if(fie.getType().equals(String.class)){
-//					PSUp.setString(i+1, String.valueOf(fie.get(obj)));
-//				}else if(fie.getType().equals(int.class)){
-//					PSUp.setInt(i+1, fie.getInt(obj));
-//				}else if(fie.getType().equals(EstadoCivil.class)){
-//					String estadoCivil = String.valueOf(fie.get(obj));
-//					EstadoCivil EC = EstadoCivil.valueOf(estadoCivil);
-//					PSUp.setInt(i+1, EC.getID());
-//				} else {
-//					throw new RuntimeException("Unsupported type.");
-//				}
-//			}
-//			return PSUp;
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}catch (IllegalArgumentException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IllegalAccessException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 //		return null;
+//		 TODO Auto-generated method stub
+		
+		Class<?> Cla = obj.getClass();
+		StringBuilder StBu = new StringBuilder();
+		
+		String TableName;
+		if(Cla.isAnnotationPresent(Tabela.class)){
+			
+			Tabela annotationTable = Cla.getAnnotation(Tabela.class);
+			TableName = annotationTable.value();
+		
+		}else{
+		
+			TableName = Cla.getSimpleName().toUpperCase();
+		
+		}
+		
+		StBu.append("UPDATE ").append(TableName).append(" SET ");
+		
+		String PK = null;
+		int PKValue = 0, j = 0;
+		
+		Field[] attr = Cla.getDeclaredFields();
+		for(int i = 0; i < attr.length; i++){
+			Field fie = attr[i];
+			
+			String ColumnName;
+			if(fie.isAnnotationPresent(Coluna.class)){
+				Coluna ColumnAnnotation = fie.getAnnotation(Coluna.class);
+				
+				if(ColumnAnnotation.nome().isEmpty()){
+					ColumnName = fie.getName().toUpperCase();
+				}else{
+					ColumnName = ColumnAnnotation.nome();
+				}
+				if(ColumnAnnotation.pk()){
+					fie.setAccessible(true);
+					PK = ColumnName;
+					try {
+						PKValue = fie.getInt(obj);
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else{
+
+					
+					if(j > 0 && i != attr.length){
+						StBu.append(", ");
+					}
+					
+					StBu.append(ColumnName).append(" = ? ");
+					j++;
+				}
+				
+			}else{
+				ColumnName = fie.getName().toUpperCase();
+			}
+		}
+		StBu.append(" WHERE ").append(PK).append(" = ?;");
+		String SQL = StBu.toString();
+		System.out.println(SQL);
+				
+		try {
+			PreparedStatement PSIn = con.prepareStatement(SQL);
+			int J = 0, i = 0;
+			for(; J < j; ){
+				Field fie = attr[i];
+				
+				if(fie.isAnnotationPresent(Coluna.class)){
+					Coluna ColumnAnnotation = fie.getAnnotation(Coluna.class);
+					
+					if(!ColumnAnnotation.pk()){				
+						fie.setAccessible(true);
+//						System.out.println(J+1);
+						if(fie.getType().equals(String.class)){
+							PSIn.setString(J+1, String.valueOf(fie.get(obj)));
+						}else if(fie.getType().equals(int.class)){
+							PSIn.setInt(J+1, fie.getInt(obj));
+						}else if(fie.getType().equals(EstadoCivil.class)){
+							String estadoCivil = String.valueOf(fie.get(obj));
+							EstadoCivil EC = EstadoCivil.valueOf(estadoCivil);
+							PSIn.setInt(J+1, EC.getID());
+						}
+						J++;
+					}
+					i++;
+				}else{
+					fie.setAccessible(true);
+//					System.out.println(J+1);
+					if(fie.getType().equals(String.class)){
+						PSIn.setString(J+1, String.valueOf(fie.get(obj)));
+					}else if(fie.getType().equals(int.class)){
+						PSIn.setInt(J+1, fie.getInt(obj));
+					}else if(fie.getType().equals(EstadoCivil.class)){
+						String estadoCivil = String.valueOf(fie.get(obj));
+						EstadoCivil EC = EstadoCivil.valueOf(estadoCivil);
+						PSIn.setInt(J+1, EC.getID());
+					}
+					J++;
+					i++;
+				}
+			}
+//			System.out.println(J+1);
+			PSIn.setInt(J+1, PKValue);
+			return PSIn;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
@@ -554,7 +563,8 @@ public class SQLGenI extends SqlGen {
 		PreparedStatement PSDel = null;
 		try {
 			PSDel = con.prepareStatement(SQL);
-			PSDel.setInt(0, pk.getInt(obj));
+			pk.setAccessible(true);
+			PSDel.setInt(1, pk.getInt(obj));
 			return PSDel;
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

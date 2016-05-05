@@ -48,12 +48,14 @@ public class DaoI implements Dao<Cliente, Integer> {
 			// Abre a conexao e faz as devidas consultas
 			Con = abrirConexao();
 			PreparedStatement PSSea = sql.getSqlSelectById(Con, cli);
-			PSSea.executeQuery();
 			ResultSet RS = PSSea.getResultSet();
-			cli.setNome(RS.getString("NOME"));
-			cli.setEndereco(RS.getString("ENDERECO"));
-			cli.setTelefone(RS.getString("TELEFONE"));
-			cli.setEstadoCivil(EstadoCivil.values()[RS.getInt("ESTADOCIVIL")]);
+			if(!RS.wasNull()){
+				RS.next();
+				cli.setNome(RS.getString("NOME"));
+				cli.setEndereco(RS.getString("ENDERECO"));
+				cli.setTelefone(RS.getString("TELEFONE"));
+				cli.setEstadoCivil(EstadoCivil.values()[RS.getInt("ESTADOCIVIL")]);
+			}
 			return cli;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -125,15 +127,13 @@ public class DaoI implements Dao<Cliente, Integer> {
 //		 Abre a conexao e faz as devidas consultas
 			Con = abrirConexao();
 			PreparedStatement PSAll = sql.getSqlSelectAll(Con, cli);
-			PSAll.executeQuery();
 			ResultSet RS = PSAll.getResultSet();
 //			boolean VRS = true;
-			if(RS.wasNull()){
+			if(!RS.wasNull()){
 				while(RS.next()){
 					
 					cli = new Cliente(RS.getInt("ID"), RS.getString("NOME"), RS.getString("ENDERECO"), RS.getString("TELEFONE"), EstadoCivil.values()[RS.getInt("ESTADOCIVIL")]);
 					LR.add(cli);
-					System.out.println(RS.getString("NOME"));
 					
 				}
 			}else{

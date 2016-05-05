@@ -4,9 +4,9 @@ package me.polles;
 public enum EstadoCivil {
 	
 	// Itens da Enum
-	CASADO("Casado", 1),
-	SOLTEIRO("Solteiro", 2), 
-	VIUVO("Viuvo", 3);
+	CASADO("Casado", 0),
+	SOLTEIRO("Solteiro", 1), 
+	VIUVO("Viuvo", 2);
 	
 	// Atributos de cada Enum
 	private String estadoCivil;

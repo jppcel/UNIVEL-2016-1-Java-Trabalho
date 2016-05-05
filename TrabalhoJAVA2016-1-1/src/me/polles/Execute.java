@@ -15,14 +15,19 @@ public class Execute {
 		
 		// Apaga a tabela relativa a cliente(se existir)
 		DC.drop(new Cliente());
+		System.out.println("=====");
 		
 		// Cria a tabela de Cliente
 		DC.criarTabela(new Cliente());
+		System.out.println("=====");
 		
 		// Insere os clientes no DB
 		DC.salvar(Cl1);
+		System.out.println("=====");
 		DC.salvar(Cl2);
+		System.out.println("=====");
 		DC.salvar(Cl3);
+		System.out.println("=====");
 		
 		// Lista todos os clientes
 		List<Cliente> LC = DC.listarTodos();
@@ -32,19 +37,32 @@ public class Execute {
 			String E = c.getEstadoCivil().toString();
 			System.out.println(c.getId()+": "+c.getNome()+" "+c.getEndereco()+"; "+c.getTelefone()+"; "+E);
 		}
+		System.out.println("=====");
 		
 		// Busca o Cliente 1
-//		DC.buscar(Cl1.getId());
+		Cliente Busca = DC.buscar(Cl1.getId());
+		
+
+		System.out.println(Busca.getId()+": "+Busca.getNome()+" "+Busca.getEndereco()+"; "+Busca.getTelefone()+"; "+Busca.getEstadoCivil().name());
+		System.out.println("=====");
 		
 		// Altera o Cliente 1
-//		Cl1.setNome("Joao P.");
-//		DC.atualizar(Cl1);
+		Cl1.setNome("Joao P.");
+		DC.atualizar(Cl1);
+		System.out.println("=====");
 		
 		// Exclui o Cliente 2
-//		DC.excluir(Cl2.getId());
+		DC.excluir(Cl2.getId());
+		System.out.println("=====");
 		
 		// Lista todos os clientes
-//		DC.listarTodos(Cl1);
+		LC = DC.listarTodos();
+
+		System.out.println("Lista de Clientes:");
+		for(Cliente c: LC){
+			String E = c.getEstadoCivil().toString();
+			System.out.println(c.getId()+": "+c.getNome()+" "+c.getEndereco()+"; "+c.getTelefone()+"; "+E);
+		}
 	}
 	
 }
